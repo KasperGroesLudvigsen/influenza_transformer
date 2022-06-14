@@ -1,3 +1,7 @@
+"""
+Showing how to use the model with some time series data
+"""
+
 import data.dataset as ds
 import utils
 from torch.utils.data import DataLoader
