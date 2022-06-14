@@ -4,59 +4,6 @@ from torch.utils.data import Dataset
 import pandas as pd
 from typing import Tuple
 
-class Univariate_seq2seq(Dataset):  
-    """FCR price dataset designed for univariate time series forecasting
-    
-    For multivariate time series forecasting, make a child class of this class.
-    
-    """
-
-    def __init__(self, indices: list, data: torch.tensor, src_len: int, target_seq_len: int):
-        """
-        Args:
-            indices (list): List of tuples. The length, n, of the list corresponds to the
-                             number of sub-sequences that will be drawn from the entire
-                             data sequence. The indices can be generated with the designated function
-                             Each tuple has 4 elements: 
-                            1) The index position of the first element to be included in the input sequence
-                            2) The index position of the last element to be included in the input sequence
-                            3) The index position of the first element to be included in the target sequence
-                            4) The index position of the last element to be included in the target sequence 
-                             
-            data (torch.tensor): The entire data sequence (i.e. all observations from the 
-                                 FCR price time series data)
-
-
-        """
-
-        #self.data = pd.read_csv(data_path)
-        self.indices = indices
-        # Slicing data to save memory
-        self.data = data[indices[0][0]:indices[-1][2]] 
-
-    def __len__(self):
-        return len(self.indices)
-
-    def __getitem__(self, index):
-        """
-        Returns a tuple with 2 elements:
-        1) The input sequence. 
-        2) The output sequence. 
-        
-        The length of the sequences is determined by the arguments 
-        given to the function that generates the indices.
-        """
-        start_index = self.indices[index][0]
-        end_index = self.indices[index][1]
-        target_index = self.indices[index][2]
-        input_sequence = self.data[start_index:end_index]
-        target = self.data[self.indices[index][2]:self.indices[index][3]]
-        if index == 0:
-            print("Length of target: ")
-            print(len(target))
-        return input_sequence, target
-
-
 class TransformerDataset(Dataset):
     """
     Dataset class used for transformer models.
