@@ -7,4 +7,6 @@ The article explains step by step how to code the Transformer model used in the 
 
 The article uses the Transformer architecture diagram from the paper as the point of departure and shows step by step how to implement the model with PyTorch.
 
+The sandbox.py file shows how to use the Transformer to make a prediction on the data from the .csv file in "/data". 
+
 https://kaspergroesludvigsen.medium.com/how-to-make-a-pytorch-transformer-for-time-series-forecasting-69e073d4061e
