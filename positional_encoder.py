@@ -61,9 +61,8 @@ class PositionalEncoder(nn.Module):
         Args:
             x: Tensor, shape [batch_size, enc_seq_len, dim_val]
         """
-        print("From PositionalEncoding.forward(): size of input (x) = {}".format(x.size()))
         add = self.pe[:x.size(1), :].squeeze(1)
-        print("From PositionalEncoding.forward(): size of add = {}".format(add.size()))
+
         x = x + add
 
         return self.dropout(x)
