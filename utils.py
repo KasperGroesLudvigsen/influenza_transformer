@@ -211,29 +211,3 @@ def to_numeric_and_downcast_data(df: pd.DataFrame):
     df[icols] = df[icols].apply(pd.to_numeric, downcast='integer')
 
     return df
-
-############# OLD STUFF FROM KAMSTRUP PROJECT ########################
-
-
-CWD = os.getcwd()
-EXP_NUM_PATH = os.path.join(CWD, "logs/experiment_number.npy")
-
-def increment_experiment_number():
-    exp_num = np.load(EXP_NUM_PATH)
-    assert exp_num.shape == (1,)
-    print("exp_num prior to increment: {}".format(exp_num))
-    exp_num += 1
-    assert exp_num.shape == (1,)
-    print("exp_num after increment: {}".format(exp_num))
-    np.save(EXP_NUM_PATH, exp_num)
-    
-def get_experiment_number():
-    "Returns the next experiment number as numpy integer"
-    exp_num = np.load(EXP_NUM_PATH)[0]
-    return exp_num
-
-def set_experiment_number(number):
-    num = np.array([number])
-    np.save(EXP_NUM_PATH, num)
-
-
