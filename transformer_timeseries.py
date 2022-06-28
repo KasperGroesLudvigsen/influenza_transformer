@@ -117,7 +117,7 @@ class TimeSeriesTransformer(nn.Module):
             )  
 
         self.linear_mapping = nn.Linear(
-            in_features=out_seq_len*dim_val,
+            in_features=dim_val,
             out_features=out_seq_len
             )
 
@@ -234,9 +234,8 @@ class TimeSeriesTransformer(nn.Module):
 
         # Pass through the linear mapping layer
         #print("From model.forward(): decoder_output size before flatten = {}".format(decoder_output.size()))
-        #print("From model.forward(): decoder_output size after flatten = {}".format(decoder_output.flatten(start_dim=1).size()))
 
-        decoder_output= self.linear_mapping(decoder_output.flatten(start_dim=1))
+        decoder_output= self.linear_mapping(decoder_output)
         #print("From model.forward(): decoder_output size after last linear layer = {}".format(decoder_output.size()))
 
         return decoder_output
