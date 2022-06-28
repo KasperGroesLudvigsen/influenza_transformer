@@ -117,7 +117,7 @@ class TimeSeriesTransformer(nn.Module):
             )  
 
         self.linear_mapping = nn.Linear(
-            in_features=dim_val,
+            in_features=dim_val*out_seq_len,
             out_features=out_seq_len
             )
 
