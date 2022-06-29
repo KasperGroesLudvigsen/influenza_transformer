@@ -232,6 +232,15 @@ class TimeSeriesTransformer(nn.Module):
             memory_mask=src_mask
             )
 
+        # linear mapping layer outputs a tensor of the same dimensions as its
+        # input. As we need a 2D output from the model, i.e. [batch_size, output_len], we 
+        # need to flatten the input to the linear mapping layer so that it changes
+        # shape from 3D to 2D
+        print("From model.forward(): decoder_output size before flatten = {}".format(decoder_output.size()))
+        decoder_output = decoder_output.flatten(start_dim=1) # shape: [batch_size, target seq len * dim_val]
+        print("From model.forward(): decoder_output size after flatten = {}".format(decoder_output.shape))
+
+
         # Pass through the linear mapping layer
         #print("From model.forward(): decoder_output size before flatten = {}".format(decoder_output.size()))
 
