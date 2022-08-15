@@ -6,6 +6,8 @@ NB! This is not a full training loop. You have to write the training loop yourse
 I.e. this code is just a starting point to show you how to initialize the model and provide its inputs
 
 If you do not know how to train a PyTorch model, it is too soon for you to dive into transformers imo :) 
+
+You're better off starting off with some simpler architectures, e.g. a simple feed forward network, in order to learn the basics
 """
 
 import dataset as ds
