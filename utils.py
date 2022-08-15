@@ -7,7 +7,7 @@ import pandas as pd
 from pathlib import Path
 
 
-def generate_square_subsequent_mask(dim1: int, dim2: int, dim3: int) -> Tensor:
+def generate_square_subsequent_mask(dim1: int, dim2: int) -> Tensor:
     """
     Generates an upper-triangular matrix of -inf, with zeros on diag.
     Modified from: 
@@ -15,19 +15,19 @@ def generate_square_subsequent_mask(dim1: int, dim2: int, dim3: int) -> Tensor:
 
     Args:
 
-        dim1: int, batch_size * n_heads
+        dim1: int, for both src and tgt masking, this must be target sequence
+              length
 
-        dim2: int. For src and trg masking this must be target sequence length. 
+        dim2: int, for src masking this must be encoder sequence length (i.e. 
+              the length of the input sequence to the model), 
+              and for tgt masking, this must be target sequence length 
 
-        dim3: int. For src masking, this must be encoder sequence length.
-              For trg masking, this must be target sequence length 
 
     Return:
 
-        A Tensor of shape [dim1, dim2, dim3]
+        A Tensor of shape [dim1, dim2]
     """
-    return torch.triu(torch.ones(dim1, dim2, dim3) * float('-inf'), diagonal=1)
-
+    return torch.triu(torch.ones(dim1, dim2) * float('-inf'), diagonal=1)
 
 
 def get_indices_input_target(num_obs, input_len, step_size, forecast_horizon, target_len):
