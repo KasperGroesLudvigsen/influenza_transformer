@@ -1,5 +1,7 @@
 """
-Showing how to use the model with some time series data
+Showing how to use the model with some time series data.
+
+NB! This is not a full training loop. You have to write the training loop yourself. I.e. this code is just a starting point to show you how to initialize the model and provide its inputs
 """
 
 import dataset as ds
@@ -69,29 +71,24 @@ i, batch = next(enumerate(training_data))
 src, trg, trg_y = batch
 
 model = tst.TimeSeriesTransformer(
-    dim_val=dim_val,
-    input_size=input_size, 
-    dec_seq_len=dec_seq_len,
-    max_seq_len=max_seq_len,
-    out_seq_len=output_sequence_length, 
-    n_decoder_layers=n_decoder_layers,
-    n_encoder_layers=n_encoder_layers,
-    n_heads=n_heads)
+    input_size=len(input_variables),
+    dec_seq_len=enc_seq_len,
+    batch_first=batch_first,
+    num_predicted_features=1
+    )
 
 # Make src mask for decoder with size:
 # [batch_size*n_heads, output_sequence_length, enc_seq_len]
 src_mask = utils.generate_square_subsequent_mask(
-    dim1=batch_size*n_heads,
-    dim2=output_sequence_length,
-    dim3=enc_seq_len
+    dim1=output_sequence_length,
+    dim2=enc_seq_len
     )
 
 # Make tgt mask for decoder with size:
 # [batch_size*n_heads, output_sequence_length, output_sequence_length]
 tgt_mask = utils.generate_square_subsequent_mask( 
-    dim1=batch_size*n_heads,
-    dim2=output_sequence_length,
-    dim3=output_sequence_length
+    dim1=output_sequence_length,
+    dim2=output_sequence_length
     )
 
 output = model(
@@ -100,5 +97,3 @@ output = model(
     src_mask=src_mask,
     tgt_mask=tgt_mask
     )
-
-assert output.size()[0] == batch_size and output.size()[1] == output_sequence_length
