@@ -12,21 +12,22 @@ class PositionalEncoder(nn.Module):
     model to make use of the order of the sequence, we must inject some 
     information about the relative or absolute position of the tokens in the 
     sequence." (Vaswani et al, 2017)
-
     Adapted from: 
     https://pytorch.org/tutorials/beginner/transformer_tutorial.html
-    https://github.com/LiamMaclean216/Pytorch-Transfomer/blob/master/utils.py 
     """
 
-    def __init__(self, dropout: float = 0.1, max_seq_len: int = 5000, d_model: int = 512):
+    def __init__(
+        self, 
+        dropout: float=0.1, 
+        max_seq_len: int=5000, 
+        d_model: int=512,
+        batch_first: bool=False
+        ):
 
         """
         Parameters:
-
             dropout: the dropout rate
-
             max_seq_len: the maximum length of the input sequences
-
             d_model: The dimension of the output of sub-layers in the model 
                      (Vaswani et al, 2017)
         """
@@ -37,32 +38,30 @@ class PositionalEncoder(nn.Module):
         
         self.dropout = nn.Dropout(p=dropout)
 
-        # Create constant positional encoding matrix with values 
-        # dependent on position and i
+        self.batch_first = batch_first
+
+        self.x_dim = 1 if batch_first else 0
+
+        # copy pasted from PyTorch tutorial
         position = torch.arange(max_seq_len).unsqueeze(1)
         
-        exp_input = torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model)
+        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
         
-        div_term = torch.exp(exp_input) # Returns a new tensor with the exponential of the elements of exp_input
+        pe = torch.zeros(max_seq_len, 1, d_model)
         
-        pe = torch.zeros(max_seq_len, d_model)
-
-        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 0, 0::2] = torch.sin(position * div_term)
         
-        pe[:, 1::2] = torch.cos(position * div_term) # torch.Size([58, 512])
-
-        pe = pe.unsqueeze(0).transpose(0, 1) # torch.Size([58, 1, 512])
-
-        # register that pe is not a model parameter
+        pe[:, 0, 1::2] = torch.cos(position * div_term)
+        
         self.register_buffer('pe', pe)
         
     def forward(self, x: Tensor) -> Tensor:
         """
         Args:
-            x: Tensor, shape [batch_size, enc_seq_len, dim_val]
+            x: Tensor, shape [batch_size, enc_seq_len, dim_val] or 
+               [enc_seq_len, batch_size, dim_val]
         """
-        add = self.pe[:x.size(1), :].squeeze(1)
 
-        x = x + add
+        x = x + self.pe[:x.size(self.x_dim)]
 
         return self.dropout(x)
