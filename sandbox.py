@@ -1,7 +1,11 @@
 """
 Showing how to use the model with some time series data.
 
-NB! This is not a full training loop. You have to write the training loop yourself. I.e. this code is just a starting point to show you how to initialize the model and provide its inputs
+NB! This is not a full training loop. You have to write the training loop yourself. 
+
+I.e. this code is just a starting point to show you how to initialize the model and provide its inputs
+
+If you do not know how to train a PyTorch model, it is too soon for you to dive into transformers imo :) 
 """
 
 import dataset as ds
@@ -33,6 +37,7 @@ step_size = 1 # Step size, i.e. how many time steps does the moving window move 
 in_features_encoder_linear_layer = 2048
 in_features_decoder_linear_layer = 2048
 max_seq_len = enc_seq_len
+batch_first = False
 
 # Define input variables 
 exogenous_vars = [] # should contain strings. Each string must correspond to a column name
@@ -69,6 +74,17 @@ training_data = DataLoader(training_data, batch_size)
 i, batch = next(enumerate(training_data))
 
 src, trg, trg_y = batch
+
+# Permute from shape [batch size, seq len, num features] to [seq len, batch size, num features]
+if batch_first == False:
+
+    shape_before = src.shape
+    src = src.permute(1, 0, 2)
+    print("src shape changed from {} to {}".format(shape_before, src.shape))
+
+    shape_before = tgt.shape
+    tgt = tgt.permute(1, 0, 2)
+    print("src shape changed from {} to {}".format(shape_before, src.shape))
 
 model = tst.TimeSeriesTransformer(
     input_size=len(input_variables),
