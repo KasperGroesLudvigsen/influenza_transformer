@@ -156,6 +156,8 @@ def read_data(data_dir: Union[str, Path] = "data",
     
     if len(csv_files) > 1:
         raise ValueError("data_dir contains more than 1 csv file. Must only contain 1")
+    elif len(csv_files) == 0:
+	raise ValueError("data_dir must contain at least 1 csv file.")
 
     data_path = csv_files[0]
 
