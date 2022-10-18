@@ -63,7 +63,7 @@ def run_encoder_decoder_inference(
     # Dimension of a batched model input that contains the target sequence values
     target_seq_dim = 0 if batch_first == False else 1
 
-    # Take the last value of the FCR price in all batches in src and make it tgt
+    # Take the last value of thetarget variable in all batches in src and make it tgt
     # as per the Influenza paper
     tgt = src[-1, :, 0] if batch_first == False else src[:, -1, 0] # shape [1, batch_size, 1]
 
