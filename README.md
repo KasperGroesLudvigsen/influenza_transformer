@@ -9,5 +9,5 @@ The second article explains how to use the time series Transformer at inference 
 
 The sandbox.py file shows how to use the Transformer to make a training prediction on the data from the .csv file in "/data".
 
-The transformer_inference.py file contains the function that takes care of inference, and the inference_example.py file shows a pseudo-ish code example of how to use the function during model validation and testing. 
+The inference.py file contains the function that takes care of inference, and the inference_example.py file shows a pseudo-ish code example of how to use the function during model validation and testing. 
 
